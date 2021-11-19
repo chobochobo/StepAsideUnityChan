@@ -20,10 +20,17 @@ public class ItemGenerator : MonoBehaviour
     //Unityちゃんのオブジェクト
     private GameObject unitychan;
 
+    float itempos;
+
+    //Unityちゃんのオブジェクト
+    float space = 20;
+    float startpos = 65;
+
     bool itemflag;
     // Use this for initialization
     void Start()
     {
+        itempos = 0;
         itemflag = true;
         //Unityちゃんのオブジェクトを取得
         this.unitychan = GameObject.Find("unitychan");
@@ -33,11 +40,10 @@ public class ItemGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //タイムを整数に
-        int time = (int)Time.time;
-        //二秒に一回出す
-        if (time % 2 == 0 && itemflag && unitychan.transform.position.z + 65 <= goalPos-20)
+        //space間隔でアイテムを出す
+        if (itempos < unitychan.transform.position.z+ space && itemflag && unitychan.transform.position.z + 65 <= goalPos-20)
         {
+
             int num = Random.Range(1, 11);
             if (num <= 2)
             {
@@ -45,7 +51,8 @@ public class ItemGenerator : MonoBehaviour
                 for (float j = -1; j <= 1; j += 0.4f)
                 {
                     GameObject cone = Instantiate(conePrefab);
-                    cone.transform.position = new Vector3(4 * j, cone.transform.position.y, unitychan.transform.position.z + 65);
+                    cone.transform.position = new Vector3(4 * j, cone.transform.position.y, unitychan.transform.position.z + startpos);
+                    itempos = cone.transform.position.z - space;
                     itemflag = false;
                 }
             }
@@ -63,7 +70,8 @@ public class ItemGenerator : MonoBehaviour
                     {
                         //コインを生成
                         GameObject coin = Instantiate(coinPrefab);
-                        coin.transform.position = new Vector3(posRange * j, coin.transform.position.y, unitychan.transform.position.z + 75);
+                        coin.transform.position = new Vector3(posRange * j, coin.transform.position.y, unitychan.transform.position.z + startpos);
+                        itempos = coin.transform.position.z - space;
                         itemflag = false;
 
                     }
@@ -71,28 +79,16 @@ public class ItemGenerator : MonoBehaviour
                     {
                         //車を生成
                         GameObject car = Instantiate(carPrefab);
-                        car.transform.position = new Vector3(posRange * j, car.transform.position.y, unitychan.transform.position.z + 70);
+                        car.transform.position = new Vector3(posRange * j, car.transform.position.y, unitychan.transform.position.z + startpos);
+                        itempos = car.transform.position.z - space;
                         itemflag = false;
                     }
                 }
             }
         }
-        else if(time % 2 == 1)
+        else if(itempos >= unitychan.transform.position.z + space)
         {
             itemflag = true;
         }
-    }
-    void OnCollisionEnter(Collision other)
-    {
-
-        Debug.Log("OnColl");
-
-    }
-
-    void OnTriggerEnter(Collider other)
-    {
-
-        Debug.Log("OnTr");
-
     }
 }
