@@ -113,6 +113,7 @@ public class UnityChanController : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
 
+        Debug.Log("あたり");
         //障害物に衝突した場合
         if (other.gameObject.tag == "CarTag" || other.gameObject.tag == "TrafficConeTag")
         {
